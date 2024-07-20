@@ -1,6 +1,8 @@
 <?php
 class DiscordNotificationsExtension extends Minz_Extension {
     public function init() {
+        Minz_View::appendScript($this->getFileUrl('dynamic-update.js', 'js'));
+
         $this->registerHook('entry_before_insert', [$this, 'onFeedUpdate']);
         $this->registerHook('js_vars', [$this, 'addVariables']);
     }

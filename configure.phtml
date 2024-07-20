@@ -4,7 +4,7 @@
     <div class="form-group">
         <label for="webhookUrl" class="group-name">Webhook URL</label>
         <div class="group-controls">
-            <input type="text" name="webhookUrl" id="webhookUrl" value="<?= $this->getWebhookURL() ?>" />
+            <input type="url" name="webhookUrl" id="webhookUrl" value="<?= $this->getWebhookURL() ?>" required/>
         </div>
     </div>
 
@@ -25,7 +25,7 @@
     <div class="form-group">
         <label for="avatar" class="group-name">Avatar URL</label>
         <div class="group-controls">
-            <input type="text" name="avatar" id="avatar" value="<?= $this->getAvatar() ?>">
+            <input type="url" name="avatar" id="avatar" value="<?= $this->getAvatar() ?>">
         </div>
     </div>
 
