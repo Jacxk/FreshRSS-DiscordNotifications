@@ -1,0 +1,8 @@
+{
+	"name": "Discord Notifications",
+	"author": "Jacxk",
+	"description": "Send a notification to a discord channel using webhooks",
+	"version": 0.1,
+	"entrypoint": "DiscordNotifications",
+	"type": "user"
+}
