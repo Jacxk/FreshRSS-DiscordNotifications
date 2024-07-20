@@ -1,5 +1,6 @@
 <?php
 class DiscordNotificationsExtension extends Minz_Extension {
+
     public function init() {
         Minz_View::appendScript($this->getFileUrl('dynamic-update.js', 'js'));
 
@@ -76,6 +77,7 @@ class DiscordNotificationsExtension extends Minz_Extension {
             'username' => $this->getUsername(),
             'avatar' => $this->getAvatar(),
             'color' => $this->getColor(),
+            'version' => $this->getVersion(),
         ];
 
         return $vars;

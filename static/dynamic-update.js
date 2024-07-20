@@ -6,8 +6,6 @@ function loadAvatarPreview() {
 
     avatarElement.addEventListener('change', () => {
         const url = avatarElement.value;
-
-        console.log(url)
         if (validUrl(url)) avatarPreview.src = url;
     })
 
@@ -17,5 +15,33 @@ function loadAvatarPreview() {
     }
 }
 
+async function checkForUpdate() {
+    const alertElement = document.querySelector('div#new-version');
+    if (!alertElement) return;
+
+    const version = context.extensions["Discord Notifications"].configuration.version;
+
+    const response = await fetch("https://raw.githubusercontent.com/Jacxk/FreshRSS-DiscordNotifications/main/metadata.json")
+        .then(res => res.json());
+
+    console.log(response);
+    const current_version = Number(version);
+    const new_version = response.version;
+
+    if (new_version > current_version) {
+        const alert = `<div class="alert" role="alert">
+            A new version of Discord Notifications is available 
+            <a href="https://github.com/Jacxk/FreshRSS-DiscordNotifications">here</a>.
+        </div>`;
+
+        alertElement.innerHTML = alert;
+    }
+}
+
+function load() {
+    checkForUpdate().catch(console.error);
+    loadAvatarPreview();
+}
+
 const slider = document.querySelector('#slider');
-if (slider) slider.addEventListener('freshrss:slider-load', loadAvatarPreview)
+if (slider) slider.addEventListener('freshrss:slider-load', load);
