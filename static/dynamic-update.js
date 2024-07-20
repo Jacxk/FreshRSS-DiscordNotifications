@@ -1,13 +1,21 @@
-const avatarElement = document.querySelector("input#avatar");
-const avatarPreview = document.querySelector("img#avatar-preview")
+function loadAvatarPreview() {
+    const avatarElement = document.querySelector("input#avatar");
+    const avatarPreview = document.querySelector("img#avatar-preview");
 
-avatarElement.addEventListener('change', () => {
-    const url = avatarElement.value;
+    if (!avatarElement || !avatarPreview) return;
 
-    if (validUrl(url)) avatarPreview.src = url;
-})
+    avatarElement.addEventListener('change', () => {
+        const url = avatarElement.value;
 
-function validUrl(url) {
-    if (!url) return;
-    return /^https?:\/\//.test(url);
+        console.log(url)
+        if (validUrl(url)) avatarPreview.src = url;
+    })
+
+    function validUrl(url) {
+        if (!url) return;
+        return /^https?:\/\//.test(url);
+    }
 }
+
+const slider = document.querySelector('#slider');
+if (slider) slider.addEventListener('freshrss:slider-load', loadAvatarPreview)
