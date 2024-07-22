@@ -17,13 +17,14 @@ class DiscordNotificationsExtension extends Minz_Extension {
             $webhook_url = $data['webhook_url'];
     
             if (is_null($webhook_url)) {
-                return $entry;
+                continue;
+            }
+            
+            if ($data['feed'] != '-1000' && $entry->feedId() != $data['feed']) {
+                continue;
             }
 
-            if ($data['feed'] != '-1000' && $entry->feedId() != $data['feed']) {
-                return $entry;
-            }
-    
+
             $embeds = [
                 'title' => $entry->title(),
                 "description" => strip_tags($entry->content()),
@@ -31,17 +32,17 @@ class DiscordNotificationsExtension extends Minz_Extension {
                 "color" => hexdec($data['color']),
                 "author" => ["name" => $entry->feed()->name() . " - " . implode(', ', $entry->authors())],
                 "timestamp" => $entry->machineReadableDate(),
-                "image" => ["url" => $entry->thumbnail()],
+                "image" => $entry->thumbnail(),
                 "footer" => ["text" => $entry->tags(true)],
             ];
     
-            $data = [
+            $messageData = [
                 'embeds' => [$embeds],
                 'username' => $data['username'],
                 'avatar_url' => $data['avatar']
             ];
-    
-            $this->sendWebhook($webhook_url, $data);
+
+            $this->sendWebhook($webhook_url, $messageData);
         }
         return $entry;
     }
