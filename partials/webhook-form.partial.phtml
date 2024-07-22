@@ -1,8 +1,8 @@
 <div class="form-group">
     <label class="group-name">Title</label>
     <div class="group-controls">
-        <input type="text" data-name="title" data-id="title" value="<?= $item['title'] ?>" placeholder="Distinguishable name"
-            required />
+        <input type="text" data-name="title" data-id="title" value="<?= $item['title'] ?>"
+            placeholder="Distinguishable name" required />
     </div>
 </div>
 
@@ -52,9 +52,12 @@
             foreach ($this->getFeeds() as $feed) {
                 $id = $feed['id'];
                 $value = strip_tags($feed['name']);
-                $selected = $id == $item['feed'];
 
-                echo "<option selected='{$selected}' value='{$id}'>{$value}</option>";
+                if ($id == $item['feed']) {
+                    echo "<option selected value='{$id}'>{$value}</option>";
+                } else {
+                    echo "<option value='{$id}'>{$value}</option>";
+                }
             }
             ?>
         </select>
@@ -64,8 +67,10 @@
 <div class="form-group">
     <label class="group-name">External Url</label>
     <div class="group-controls">
-        <button data-name="use_external-btn" type="button" class="switch <?php if($item['use_external'] == 'true') echo "active" ?>"></button>
-        <input data-name="use_external" type="checkbox" class="hidden" value="<?= $item['use_external'] ?>" />
+        <button data-name="use_external-btn" type="button"
+            class="switch <?php if ($item['use_external'] == 'true')
+                echo "active" ?>"></button>
+            <input data-name="use_external" type="checkbox" class="hidden" value="<?= $item['use_external'] ?>" />
     </div>
 </div>
 

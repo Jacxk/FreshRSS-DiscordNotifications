@@ -20,13 +20,13 @@ class DiscordNotificationsExtension extends Minz_Extension {
                 return $entry;
             }
 
-            if ($entry->feedId() != $data['feed'] || $data['feed'] != '-1000') {
+            if ($data['feed'] != '-1000' && $entry->feedId() != $data['feed']) {
                 return $entry;
             }
     
             $embeds = [
                 'title' => $entry->title(),
-                "description" => $entry->content(false),
+                "description" => strip_tags($entry->content()),
                 "url" => $entry->link(),
                 "color" => hexdec($data['color']),
                 "author" => ["name" => $entry->feed()->name() . " - " . implode(', ', $entry->authors())],
@@ -75,7 +75,10 @@ class DiscordNotificationsExtension extends Minz_Extension {
             $configuration = [
                 'data' => json_decode($data, true),
             ];
-            $this->setUserConfiguration($configuration);
+
+            if (!empty($configuration['data'])) {
+                $this->setUserConfiguration($configuration);
+            }
         }
     }
 
