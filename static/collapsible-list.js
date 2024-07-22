@@ -1,15 +1,8 @@
 const newItemEvent = new Event("discord-notifications:new-item");
 
-function enableSwitch() {
-    function toggleSwitch() {
-        this.classList.toggle('active')
-        this.parentElement.querySelector('[data-name="display_thumb"]').value = this.classList.contains('active')
-    }
-
-    const displayThumbElements = document.querySelectorAll('[data-name="display_thumb-btn"]')
-    displayThumbElements.forEach(displayThumb => {
-        displayThumb.addEventListener('click', toggleSwitch)
-    })
+function toggleSwitch() {
+    this.classList.toggle('active')
+    this.parentElement.querySelector('[data-name="display_thumb"]').value = this.classList.contains('active')
 }
 
 function toggleCollapsible(id) {
@@ -31,6 +24,7 @@ function addNotificationItem() {
     const collapsibleTitle = collapsibleItem.querySelector('[data-id="collapsible-title"]');
     const deleteItemButton = collapsibleItem.querySelector(".delete-notification");
     const avatarPreview = collapsibleItem.querySelector('[data-id="avatar-preview"]');
+    const displayThumbSwitch = collapsibleItem.querySelector('[data-name="display_thumb-btn"]')
 
     function _setValue(elementId, value) {
         const element = collapsibleItem.querySelector(`[data-name="${elementId}"]`);
@@ -54,21 +48,26 @@ function addNotificationItem() {
     collapsibleTitle.innerText = "New Notification Item";
     collapsibleTitle.onclick = toggleCollapsible.bind(this, collapsibleItem.id);
     deleteItemButton.onclick = deleteNotification.bind(this, collapsibleItem.id);
-    deleteItemButton.classList.remove('hidden')
-    avatarPreview.src = ''
+    displayThumbSwitch.onclick = toggleSwitch;
+    deleteItemButton.classList.remove('hidden');
+    avatarPreview.src = '';
 
 
     listHolder.appendChild(collapsibleItem);
     toggleCollapsible(collapsibleItem.id);
-    enableSwitch();
 
-    collapsibleItem.scrollIntoView({ behavior: "smooth" })
+    collapsibleItem.scrollIntoView({ behavior: "smooth" });
     document.dispatchEvent(newItemEvent);
 }
 
 function deleteNotification(id) {
     const item = document.getElementById(id);
-    item.remove()
+    item.remove();
 }
 
-document.addEventListener('discord-notifications:open-config', enableSwitch)
+document.addEventListener('discord-notifications:open-config', () => {
+    const displayThumbElements = document.querySelectorAll('[data-name="display_thumb-btn"]');
+    displayThumbElements.forEach(displayThumb => {
+        displayThumb.onclick = toggleSwitch;
+    })
+})
