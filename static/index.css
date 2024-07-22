@@ -1,0 +1,20 @@
+.collapsible {
+  cursor: pointer;
+  padding: 5px;
+  width: 100%;
+  text-align: left;
+}
+
+.collapsible-content {
+  padding: 0 18px;
+  display: none;
+  overflow: hidden;
+}
+
+.add-btn {
+  width: 100%;
+}
+
+.hidden {
+  display: none;
+}

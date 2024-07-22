@@ -1,0 +1,9 @@
+<div id="<?= $item_id ?>" class="form-group form-actions collapsible-item">
+    <h3 data-id="collapsible-title" onclick="toggleCollapsible('<?= $item_id ?>')" type="button" class="collapsible">
+        <?= $item['title'] ?>
+    </h3>
+
+    <div class="collapsible-content">
+        <?php include 'webhook-form.partial.phtml'; ?>
+    </div>
+</div>

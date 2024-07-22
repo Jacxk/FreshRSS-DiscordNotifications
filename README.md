@@ -15,12 +15,12 @@ Then, on your FreshRSS instance go to `Settings>Extensions`, under ***User Exten
 **To get the Webhook URL go to your discord server and on the channel you want the webhook click `Edit Channel`, then go to `Integrations` and on `Webhooks` create a new one and copy the URL*
 
 ## Features:
-* Send a notification when a new entry is added
-* Easy configuration
-* Custom webhook data - TODO
-* Preview of message on discord - TODO
-* Update checker - TODO
-* Notification per feed - TODO
+* Send a Discord message when a new entry is added to the feed.
+* Easy configuration.
+* Update notifier (available inside extension config).
+* Custom webhook JSON data. - TODO
+* Preview of message to be sent to Discord. - TODO
+* Feed specific Discord webhook.
 
 ## Showcase
 ![Config Preview](docs/config-preview.png)
