@@ -3,12 +3,12 @@ const newItemEvent = new Event("discord-notifications:new-item");
 function enableSwitch() {
     function toggleSwitch() {
         this.classList.toggle('active')
-        this.parentElement.querySelector('[data-name="use_external"]').value = this.classList.contains('active')
+        this.parentElement.querySelector('[data-name="display_thumb"]').value = this.classList.contains('active')
     }
 
-    const useExternalElements = document.querySelectorAll('[data-name="use_external-btn"]')
-    useExternalElements.forEach(useExternal => {
-        useExternal.addEventListener('click', toggleSwitch)
+    const displayThumbElements = document.querySelectorAll('[data-name="display_thumb-btn"]')
+    displayThumbElements.forEach(displayThumb => {
+        displayThumb.addEventListener('click', toggleSwitch)
     })
 }
 

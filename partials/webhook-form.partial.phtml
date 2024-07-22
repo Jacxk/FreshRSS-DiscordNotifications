@@ -17,7 +17,7 @@
 <div class="form-group">
     <label class="group-name">Username</label>
     <div class="group-controls">
-        <input type="text" data-name="username" value="<?= $item['username'] ?>" placeholder="Cool webhook" />
+        <input type="text" data-name="username" value="<?= $item['username'] ?>" placeholder="Cool webhook" required />
     </div>
 </div>
 
@@ -65,12 +65,11 @@
 </div>
 
 <div class="form-group">
-    <label class="group-name">External Url</label>
+    <label class="group-name">Display Thumbnail</label>
     <div class="group-controls">
-        <button data-name="use_external-btn" type="button"
-            class="switch <?php if ($item['use_external'] == 'true')
-                echo "active" ?>"></button>
-            <input data-name="use_external" type="checkbox" class="hidden" value="<?= $item['use_external'] ?>" />
+        <button data-name="display_thumb-btn" type="button" class="switch <?php if ($item['display_thumb'] == 'true')
+            echo "active" ?>"></button>
+            <input data-name="display_thumb" type="checkbox" class="hidden" value="<?= $item['display_thumb'] ?>" />
     </div>
 </div>
 

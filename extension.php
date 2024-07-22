@@ -12,18 +12,16 @@ class DiscordNotificationsExtension extends Minz_Extension {
     }
 
     public function onFeedUpdate(FreshRSS_Entry $entry): FreshRSS_Entry {
-        
         foreach ($this->getData() as $data) {
             $webhook_url = $data['webhook_url'];
-    
+
             if (is_null($webhook_url)) {
                 continue;
             }
-            
+
             if ($data['feed'] != '-1000' && $entry->feedId() != $data['feed']) {
                 continue;
             }
-
 
             $embeds = [
                 'title' => $entry->title(),
@@ -32,10 +30,13 @@ class DiscordNotificationsExtension extends Minz_Extension {
                 "color" => hexdec($data['color']),
                 "author" => ["name" => $entry->feed()->name() . " - " . implode(', ', $entry->authors())],
                 "timestamp" => $entry->machineReadableDate(),
-                "image" => $entry->thumbnail(),
                 "footer" => ["text" => $entry->tags(true)],
             ];
-    
+
+            if ($data['display_thumb'] == 'true') {
+                $embeds["image"] = $entry->thumbnail();
+            }
+
             $messageData = [
                 'embeds' => [$embeds],
                 'username' => $data['username'],
@@ -60,7 +61,7 @@ class DiscordNotificationsExtension extends Minz_Extension {
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         $response = curl_exec($ch);
 
-        if(curl_errno($ch)) {
+        if (curl_errno($ch)) {
             Minz_Log::error(curl_error($ch));
         } else {
             Minz_Log::notice($response);
@@ -98,12 +99,12 @@ class DiscordNotificationsExtension extends Minz_Extension {
 
     public function getFeeds() {
         $feeds = FreshRSS_Context::feeds();
-        $feedNames = array_map(function($feed) {
+        $feedNames = array_map(function ($feed) {
             return ['name' => $feed->name(), 'id' => $feed->id()];
         }, $feeds);
 
         $feedNames += [['name' => 'All Feeds', 'id' => -1000]];
-        usort($feedNames, function($a, $b) {
+        usort($feedNames, function ($a, $b) {
             return $a['id'] - $b['id'];
         });
         return $feedNames;

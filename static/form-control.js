@@ -10,7 +10,7 @@ document.addEventListener('discord-notifications:open-config', () => {
             const color = collapsibleItem.querySelector('[data-name="color"]').value;
             const avatar = collapsibleItem.querySelector('[data-name="avatar"]').value;
             const feed = collapsibleItem.querySelector('[data-name="feed"]').value;
-            const use_external = collapsibleItem.querySelector('[data-name="use_external"]').value;
+            const display_thumb = collapsibleItem.querySelector('[data-name="display_thumb"]').value;
 
             const data = {
                 title,
@@ -19,7 +19,7 @@ document.addEventListener('discord-notifications:open-config', () => {
                 color,
                 avatar,
                 feed,
-                use_external,
+                display_thumb,
             };
 
             if (!webhook_url) error = `You need to provide the Webhook URL to '${title}'`;
