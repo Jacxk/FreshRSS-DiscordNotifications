@@ -30,6 +30,7 @@ function addNotificationItem() {
     const collapsibleItem = document.querySelector('div.collapsible-item').cloneNode(true);
     const collapsibleTitle = collapsibleItem.querySelector('[data-id="collapsible-title"]');
     const deleteItemButton = collapsibleItem.querySelector(".delete-notification");
+    const avatarPreview = collapsibleItem.querySelector('[data-id="avatar-preview"]');
 
     function _setValue(elementId, value) {
         const element = collapsibleItem.querySelector(`[data-name="${elementId}"]`);
@@ -54,6 +55,7 @@ function addNotificationItem() {
     collapsibleTitle.onclick = toggleCollapsible.bind(this, collapsibleItem.id);
     deleteItemButton.onclick = deleteNotification.bind(this, collapsibleItem.id);
     deleteItemButton.classList.remove('hidden')
+    avatarPreview.src = ''
 
 
     listHolder.appendChild(collapsibleItem);

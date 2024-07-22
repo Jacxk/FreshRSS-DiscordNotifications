@@ -40,7 +40,7 @@
     <label class="group-name">Avatar Preview</label>
     <div class="group-controls">
         <img alt="Avatar Preview" data-id="avatar-preview" style="object-fit: contain; width: 100px; height: 100px;"
-            src="<?= $$item['avatar'] ?>" />
+            src="<?= $item['avatar'] ?>" />
     </div>
 </div>
 
@@ -52,8 +52,9 @@
             foreach ($this->getFeeds() as $feed) {
                 $id = $feed['id'];
                 $value = strip_tags($feed['name']);
+                $selected = $id == $item['feed'];
 
-                echo "<option value='{$id}'>{$value}</option>";
+                echo "<option selected='{$selected}' value='{$id}'>{$value}</option>";
             }
             ?>
         </select>
@@ -63,7 +64,7 @@
 <div class="form-group">
     <label class="group-name">External Url</label>
     <div class="group-controls">
-        <button data-name="use_external-btn" type="button" class="switch <?php if($item['use_external'] == 'on') echo "active" ?>"></button>
+        <button data-name="use_external-btn" type="button" class="switch <?php if($item['use_external'] == 'true') echo "active" ?>"></button>
         <input data-name="use_external" type="checkbox" class="hidden" value="<?= $item['use_external'] ?>" />
     </div>
 </div>
