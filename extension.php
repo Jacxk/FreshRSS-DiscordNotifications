@@ -12,6 +12,14 @@ class DiscordNotificationsExtension extends Minz_Extension {
     }
 
     public function onFeedUpdate(FreshRSS_Entry $entry): FreshRSS_Entry {
+        $dao = FreshRSS_Factory::createEntryDao();
+        $daoEntry = $dao->searchById($entry->id());
+
+        if (!$daoEntry) {
+            Minz_Log::debug("[DiscordNotificationsExtension] Entry: {$entry->id()}, already exists. Skipping!");
+            return $entry;
+        }
+
         foreach ($this->getData() as $data) {
             $webhook_url = $data['webhook_url'];
 
@@ -64,7 +72,7 @@ class DiscordNotificationsExtension extends Minz_Extension {
         if (curl_errno($ch)) {
             Minz_Log::error(curl_error($ch));
         } else {
-            Minz_Log::notice($response);
+            Minz_Log::debug($response);
         }
 
         curl_close($ch);
