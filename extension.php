@@ -13,10 +13,7 @@ class DiscordNotificationsExtension extends Minz_Extension {
     }
 
     public function onFeedUpdate(FreshRSS_Entry $entry): FreshRSS_Entry {
-        $dao = FreshRSS_Factory::createEntryDao();
-        $daoEntry = $dao->searchById($entry->id());
-
-        if (!$daoEntry) {
+        if ($entry->isUpdated()) {
             Minz_Log::debug("[DiscordNotificationsExtension] Entry: {$entry->id()}, already exists. Skipping!");
             return $entry;
         }
