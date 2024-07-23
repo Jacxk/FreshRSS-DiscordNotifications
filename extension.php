@@ -2,37 +2,55 @@
 class DiscordNotificationsExtension extends Minz_Extension {
 
     public function init() {
+        Minz_View::appendScript($this->getFileUrl('utilities.js', 'js'));
         Minz_View::appendScript($this->getFileUrl('dynamic-update.js', 'js'));
+        Minz_View::appendScript($this->getFileUrl('collapsible-list.js', 'js'));
+        Minz_View::appendScript($this->getFileUrl('form-control.js', 'js'));
+        Minz_View::appendStyle($this->getFileUrl('index.css', 'css'));
 
         $this->registerHook('entry_before_insert', [$this, 'onFeedUpdate']);
         $this->registerHook('js_vars', [$this, 'addVariables']);
     }
 
     public function onFeedUpdate(FreshRSS_Entry $entry): FreshRSS_Entry {
-        $webhook_url = $this->getWebhookURL();
-
-        if (is_null($webhook_url)) {
+        if ($entry->isUpdated()) {
+            Minz_Log::debug("[DiscordNotificationsExtension] Entry: {$entry->id()}, already exists. Skipping!");
             return $entry;
         }
 
-        $embeds = array(
-            'title' => $entry->title(),
-            "description" => strip_tags($entry->content()),
-            "url" => $entry->link(),
-            "color" => hexdec($this->getColor()),
-            "author" => array("name" => $entry->feed()->name() . " - " . $entry->authors(true)),
-            "timestamp" => $entry->machineReadableDate(),
-            "image" => array("url" => $entry->thumbnail()),
-            "footer" => array("text" => $entry->tags(true)),
-        );
+        foreach ($this->getData() as $data) {
+            $webhook_url = $data['webhook_url'];
 
-        $data = array(
-            'embeds' => array($embeds),
-            'username' => $this->getUsername(),
-            'avatar_url' => $this->getAvatar()
-        );
+            if (is_null($webhook_url)) {
+                continue;
+            }
 
-        $this->sendWebhook($webhook_url, $data);
+            if ($data['feed'] != '-1000' && $entry->feedId() != $data['feed']) {
+                continue;
+            }
+
+            $embeds = [
+                'title' => $entry->title(),
+                "description" => strip_tags($entry->content()),
+                "url" => $entry->link(),
+                "color" => hexdec($data['color']),
+                "author" => ["name" => $entry->feed()->name() . " - " . implode(', ', $entry->authors())],
+                "timestamp" => $entry->machineReadableDate(),
+                "footer" => ["text" => $entry->tags(true)],
+            ];
+
+            if ($data['display_thumb'] == 'true') {
+                $embeds["image"] = $entry->thumbnail();
+            }
+
+            $messageData = [
+                'embeds' => [$embeds],
+                'username' => $data['username'],
+                'avatar_url' => $data['avatar']
+            ];
+
+            $this->sendWebhook($webhook_url, $messageData);
+        }
         return $entry;
     }
 
@@ -42,17 +60,17 @@ class DiscordNotificationsExtension extends Minz_Extension {
 
         curl_setopt($ch, CURLOPT_POST, true);
         curl_setopt($ch, CURLOPT_POSTFIELDS, $json_data);
-        curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+        curl_setopt($ch, CURLOPT_HTTPHEADER, [
             'Content-Type: application/json',
             'Content-Length: ' . strlen($json_data)
-        ));
+        ]);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         $response = curl_exec($ch);
 
-        if(curl_errno($ch)) {
+        if (curl_errno($ch)) {
             Minz_Log::error(curl_error($ch));
         } else {
-            Minz_Log::notice($response);
+            Minz_Log::debug($response);
         }
 
         curl_close($ch);
@@ -61,42 +79,41 @@ class DiscordNotificationsExtension extends Minz_Extension {
 
     public function handleConfigureAction() {
         if (Minz_Request::isPost()) {
+            $data = Minz_Request::paramString('discord-notifications-data', true);
             $configuration = [
-                'webhookUrl' => (string) Minz_Request::param('webhookUrl'),
-                'username' => (string) Minz_Request::param('username'),
-                'avatar' => (string) Minz_Request::param('avatar'),
-                'color' => (string) Minz_Request::param('color'),
+                'data' => json_decode($data, true),
             ];
-            $this->setUserConfiguration($configuration);
+
+            if (!empty($configuration['data'])) {
+                $this->setUserConfiguration($configuration);
+            }
         }
     }
 
     public function addVariables($vars) {
         $vars[$this->getName()]['configuration'] = [
-            'webhookUrl' => $this->getWebhookURL(),
-            'username' => $this->getUsername(),
-            'avatar' => $this->getAvatar(),
-            'color' => $this->getColor(),
+            'data' => $this->getData(),
             'version' => $this->getVersion(),
         ];
 
         return $vars;
     }
 
-    public function getWebhookURL() {
-        return $this->getUserConfigurationValue('webhookUrl');
+    public function getData() {
+        return $this->getUserConfigurationValue('data', [['title' => 'default']]);
     }
 
-    public function getUsername() {
-        return $this->getUserConfigurationValue('username');
-    }
+    public function getFeeds() {
+        $feeds = FreshRSS_Context::feeds();
+        $feedNames = array_map(function ($feed) {
+            return ['name' => $feed->name(), 'id' => $feed->id()];
+        }, $feeds);
 
-    public function getAvatar() {
-        return $this->getUserConfigurationValue('avatar');
-    }
-
-    public function getColor() {
-        return $this->getUserConfigurationValue('color', '#04ff00');
+        $feedNames += [['name' => 'All Feeds', 'id' => -1000]];
+        usort($feedNames, function ($a, $b) {
+            return $a['id'] - $b['id'];
+        });
+        return $feedNames;
     }
 }
 

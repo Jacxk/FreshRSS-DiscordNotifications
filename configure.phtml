@@ -1,49 +1,32 @@
-<form action="<?php echo _url('extension', 'configure', 'e', urlencode($this->getName())); ?>" method="post">
+<form id="extention-form" action="<?php echo _url('extension', 'configure', 'e', urlencode($this->getName())); ?>"
+    method="post">
     <input type="hidden" name="_csrf" value="<?php echo FreshRSS_Auth::csrfToken(); ?>" />
-    <div id="new-version"></div>
-    <div class="form-group">
-        <label for="webhookUrl" class="group-name">Webhook URL</label>
-        <div class="group-controls">
-            <input type="url" name="webhookUrl" id="webhookUrl" value="<?= $this->getWebhookURL() ?>"
-                placeholder="https://discord.com/api/webhooks/..." required />
-        </div>
+    <input type="hidden" name="discord-notifications-data" value="[]" />
+    <div id="extension-alerts" class="alert hidden" role="alert"></div>
+
+    <div class="download-import">
+        <button id="download-config" type="button" class="btn" title="Download config">Export</button>
+        <button id="import-config" type="button" class="btn" title="Import configuration">Import</button>
     </div>
 
-    <div class="form-group">
-        <label for="username" class="group-name">Username</label>
-        <div class="group-controls">
-            <input type="text" name="username" id="username" value="<?= $this->getUsername() ?>"
-                placeholder="Cool webhook" />
-        </div>
+    <div class="discord-notifications-list">
+        <?php
+        $data = $this->getData();
+
+        foreach ($data as $index => $item) {
+            $item_id = "collapsible-{$index}";
+            include 'partials/collapsible.partial.phtml';
+        } ?>
     </div>
 
-    <div class="form-group">
-        <label for="color" class="group-name">Embed Color</label>
-        <div class="group-controls">
-            <input style="padding: 0px;" type="color" name="color" id="color" value="<?= $this->getColor() ?>" />
-        </div>
-    </div>
-
-    <div class="form-group">
-        <label for="avatar" class="group-name">Avatar URL</label>
-        <div class="group-controls">
-            <input type="url" name="avatar" id="avatar" value="<?= $this->getAvatar() ?>"
-                placeholder="https://example.com/image.jpg" />
-        </div>
-    </div>
-
-    <div class="form-group">
-        <label for="avatar-preview" class="group-name">Avatar Preview</label>
-        <div class="group-controls">
-            <img alt="Avatar Preview" id="avatar-preview" style="object-fit: contain; width: 100px; height: 100px;"
-                src="<?= $this->getAvatar() ?>" />
-        </div>
-    </div>
+    <button type="button" class="btn btn-important add-btn" onclick="addNotificationItem()">
+        Add Notification
+    </button>
 
     <div class="form-group form-actions">
         <div class="group-controls">
-            <button type="submit" class="btn btn-important">Save</button>
-            <button type="reset" class="btn">Cancel</button>
+            <button id="save-changes" type="submit" class="btn btn-important">Save</button>
+            <a type="reset" class="btn" href="#" role="button">Cancel</a>
         </div>
     </div>
 </form>

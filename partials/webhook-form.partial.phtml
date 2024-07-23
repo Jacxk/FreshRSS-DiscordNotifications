@@ -1,0 +1,83 @@
+<div class="form-group">
+    <label class="group-name">Title</label>
+    <div class="group-controls">
+        <input type="text" data-name="title" data-id="title" value="<?= $item['title'] ?>"
+            placeholder="Distinguishable name" required />
+    </div>
+</div>
+
+<div class="form-group">
+    <label class="group-name">Webhook URL</label>
+    <div class="group-controls">
+        <input type="url" data-name="webhook_url" value="<?= $item['webhook_url'] ?>"
+            placeholder="https://discord.com/api/webhooks/..." required />
+    </div>
+</div>
+
+<div class="form-group">
+    <label class="group-name">Username</label>
+    <div class="group-controls">
+        <input type="text" data-name="username" value="<?= $item['username'] ?>" placeholder="Cool webhook" required />
+    </div>
+</div>
+
+<div class="form-group">
+    <label class="group-name">Embed Color</label>
+    <div class="group-controls">
+        <input style="padding: 0px;" type="color" data-name="color" value="<?= $item['color'] ?>" />
+    </div>
+</div>
+
+<div class="form-group">
+    <label class="group-name">Avatar URL</label>
+    <div class="group-controls">
+        <input type="url" data-name="avatar" data-id="avatar" value="<?= $item['avatar'] ?>"
+            placeholder="https://example.com/image.jpg" />
+    </div>
+</div>
+
+<div class="form-group">
+    <label class="group-name">Avatar Preview</label>
+    <div class="group-controls">
+        <img alt="Avatar Preview" data-id="avatar-preview" style="object-fit: contain; width: 100px; height: 100px;"
+            src="<?= $item['avatar'] ?>" />
+    </div>
+</div>
+
+<div class="form-group">
+    <label class="group-name">Feed to monitor</label>
+    <div class="group-controls">
+        <select data-name="feed">
+            <?php
+            foreach ($this->getFeeds() as $feed) {
+                $id = $feed['id'];
+                $value = strip_tags($feed['name']);
+
+                if ($id == $item['feed']) {
+                    echo "<option selected value='{$id}'>{$value}</option>";
+                } else {
+                    echo "<option value='{$id}'>{$value}</option>";
+                }
+            }
+            ?>
+        </select>
+    </div>
+</div>
+
+<div class="form-group">
+    <label class="group-name">Display Thumbnail</label>
+    <div class="group-controls">
+        <button data-name="display_thumb-btn" type="button" class="switch <?php if ($item['display_thumb'] == 'true')
+            echo "active" ?>"></button>
+            <input data-name="display_thumb" type="checkbox" class="hidden" value="<?= $item['display_thumb'] ?>" />
+    </div>
+</div>
+
+<div class="form-group">
+    <div class="group-controls">
+        <button type="button" class="btn btn-attention delete-notification <?php if ($index == 0)
+            echo "hidden" ?>" onclick="removeItem('<?= $item_id ?>')">
+            Delete
+        </button>
+    </div>
+</div>

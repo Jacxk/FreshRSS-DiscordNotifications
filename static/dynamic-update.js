@@ -1,47 +1,41 @@
 function loadAvatarPreview() {
-    const avatarElement = document.querySelector("input#avatar");
-    const avatarPreview = document.querySelector("img#avatar-preview");
+    const avatarElements = document.querySelectorAll('input[data-id="avatar"]');
 
-    if (!avatarElement || !avatarPreview) return;
+    avatarElements.forEach(avatarElement => {
+        let topParent = avatarElement.parentElement;
+        'aa'.split('').map(_ => topParent = topParent.parentElement)
 
-    avatarElement.addEventListener('change', () => {
-        const url = avatarElement.value;
-        if (validUrl(url)) avatarPreview.src = url;
+        const avatarPreview = topParent.querySelector('img[data-id="avatar-preview"]');
+
+        avatarElement.addEventListener('input', () => {
+            const url = avatarElement.value;
+            if (validUrl(url)) avatarPreview.src = url;
+        })
     })
-
-    function validUrl(url) {
-        if (!url) return;
-        return /^https?:\/\//.test(url);
-    }
 }
 
-async function checkForUpdate() {
-    const alertElement = document.querySelector('div#new-version');
-    if (!alertElement) return;
+function dynamicTitleUpdate() {
+    const titleElements = document.querySelectorAll('input[data-id="title"]');
 
-    const version = context.extensions["Discord Notifications"].configuration.version;
+    titleElements.forEach(titleElement => {
+        let topParent = titleElement.parentElement;
+        'aaa'.split('').map(_ => topParent = topParent.parentElement)
 
-    const response = await fetch("https://raw.githubusercontent.com/Jacxk/FreshRSS-DiscordNotifications/main/metadata.json")
-        .then(res => res.json());
+        const title = topParent.querySelector('h3[data-id="collapsible-title"]');
 
-    console.log(response);
-    const current_version = Number(version);
-    const new_version = response.version;
-
-    if (new_version > current_version) {
-        const alert = `<div class="alert" role="alert">
-            A new version of Discord Notifications is available 
-            <a href="https://github.com/Jacxk/FreshRSS-DiscordNotifications">here</a>.
-        </div>`;
-
-        alertElement.innerHTML = alert;
-    }
+        titleElement.addEventListener('input', () => {
+            let titleText = titleElement.value
+            if (!titleText) titleText = 'New Notification Item'
+            title.innerText = titleText
+        })
+    })
 }
 
-function load() {
-    checkForUpdate().catch(console.error);
+document.addEventListener('discord-notifications:open-config', () => {
     loadAvatarPreview();
-}
+    dynamicTitleUpdate();
+})
 
-const slider = document.querySelector('#slider');
-if (slider) slider.addEventListener('freshrss:slider-load', load);
+
+
+document.addEventListener('discord-notifications:new-item', dynamicTitleUpdate)
