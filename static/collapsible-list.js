@@ -18,7 +18,7 @@ function toggleCollapsible(id) {
     }
 }
 
-function addNotificationItem() {
+function addNotificationItem(data = {}, open = true) {
     const listHolder = document.querySelector('div.discord-notifications-list');
     const collapsibleItem = document.querySelector('div.collapsible-item').cloneNode(true);
     const collapsibleTitle = collapsibleItem.querySelector('[data-id="collapsible-title"]');
@@ -32,12 +32,13 @@ function addNotificationItem() {
     }
 
     const values = {
-        'title': null,
-        'webhook_url': null,
-        'username': null,
-        'color': '#5F5F5F',
-        'avatar': null,
-        'feed': -1000
+        title: data.title,
+        webhook_url: data.webhook_url,
+        username: data.username,
+        color: data.color || '#5F5F5F',
+        avatar: data.avatar,
+        feed: data.feed || -1000,
+        display_thumb: data.display_thumb || 'true'
     }
 
     for (const key of Object.keys(values)) {
@@ -45,24 +46,30 @@ function addNotificationItem() {
     }
 
     collapsibleItem.id = `collapsible-${listHolder.children.length}`;
-    collapsibleTitle.innerText = "New Notification Item";
+    collapsibleTitle.innerText = data.title || "New Notification Item";
     collapsibleTitle.onclick = toggleCollapsible.bind(this, collapsibleItem.id);
-    deleteItemButton.onclick = deleteNotification.bind(this, collapsibleItem.id);
+    deleteItemButton.onclick = removeItem.bind(this, collapsibleItem.id);
     displayThumbSwitch.onclick = toggleSwitch;
     deleteItemButton.classList.remove('hidden');
-    avatarPreview.src = '';
+    avatarPreview.src = data.avatar || '';
 
+    if (data.display_thumb === 'true') toggleSwitch.call(displayThumbSwitch)
 
     listHolder.appendChild(collapsibleItem);
-    toggleCollapsible(collapsibleItem.id);
+    if (open) toggleCollapsible(collapsibleItem.id);
 
     collapsibleItem.scrollIntoView({ behavior: "smooth" });
     document.dispatchEvent(newItemEvent);
 }
 
-function deleteNotification(id) {
+function removeItem(id) {
     const item = document.getElementById(id);
     item.remove();
+}
+
+function removeItems() {
+    const listHolder = document.querySelector('div.discord-notifications-list');
+    listHolder.innerHTML = ''
 }
 
 document.addEventListener('discord-notifications:open-config', () => {

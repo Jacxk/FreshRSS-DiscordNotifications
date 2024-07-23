@@ -1,10 +1,3 @@
-const configOpenEvent = new Event("discord-notifications:open-config");
-
-function validUrl(url) {
-    if (!url) return;
-    return /^https?:\/\//.test(url);
-}
-
 function loadAvatarPreview() {
     const avatarElements = document.querySelectorAll('input[data-id="avatar"]');
 
@@ -38,41 +31,11 @@ function dynamicTitleUpdate() {
     })
 }
 
-async function checkForUpdate() {
-    const alertElement = document.querySelector('div#new-version');
-    const version = context.extensions["Discord Notifications"].configuration.version;
-
-    const response = await fetch("https://raw.githubusercontent.com/Jacxk/FreshRSS-DiscordNotifications/main/metadata.json")
-        .then(res => res.json());
-
-    const current_version = Number(version);
-    const new_version = response.version;
-
-    if (new_version > current_version) {
-        const alert = `<div class="alert" role="alert">
-            A new version of Discord Notifications is available 
-            <a href="https://github.com/Jacxk/FreshRSS-DiscordNotifications">here</a>.
-        </div>`;
-
-        alertElement.innerHTML = alert;
-    }
-}
-
 document.addEventListener('discord-notifications:open-config', () => {
     loadAvatarPreview();
     dynamicTitleUpdate();
-    checkForUpdate().catch(console.error);
 })
 
-const slider = document.querySelector('#slider');
-if (slider) slider.addEventListener('freshrss:slider-load', () => {
-    setTimeout(() => {
-        const title = document.querySelector('div.post>h2');
 
-        if (title && title.innerText.includes("Discord Notifications")) {
-            document.dispatchEvent(configOpenEvent);
-        }
-    }, 10);
-});
 
 document.addEventListener('discord-notifications:new-item', dynamicTitleUpdate)

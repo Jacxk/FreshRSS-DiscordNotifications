@@ -2,6 +2,7 @@
 class DiscordNotificationsExtension extends Minz_Extension {
 
     public function init() {
+        Minz_View::appendScript($this->getFileUrl('utilities.js', 'js'));
         Minz_View::appendScript($this->getFileUrl('dynamic-update.js', 'js'));
         Minz_View::appendScript($this->getFileUrl('collapsible-list.js', 'js'));
         Minz_View::appendScript($this->getFileUrl('form-control.js', 'js'));

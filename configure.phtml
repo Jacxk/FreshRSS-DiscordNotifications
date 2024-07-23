@@ -1,7 +1,14 @@
-<form id="extention-form" action="<?php echo _url('extension', 'configure', 'e', urlencode($this->getName())); ?>" method="post">
+<form id="extention-form" action="<?php echo _url('extension', 'configure', 'e', urlencode($this->getName())); ?>"
+    method="post">
     <input type="hidden" name="_csrf" value="<?php echo FreshRSS_Auth::csrfToken(); ?>" />
     <input type="hidden" name="discord-notifications-data" value="[]" />
-    <div id="new-version"></div>
+    <div id="extension-alerts" class="alert hidden" role="alert"></div>
+
+    <div class="download-import">
+        <button id="download-config" type="button" class="btn" title="Download config">Export</button>
+        <button id="import-config" type="button" class="btn" title="Import configuration">Import</button>
+    </div>
+
     <div class="discord-notifications-list">
         <?php
         $data = $this->getData();
