@@ -1,0 +1,24 @@
+<div>
+    <div class="embed-header">
+        <div class="embed-header-content">
+            <div class="embed-app-name"><a data-id="embed-username"><?= $item['username'] ?></a> <span
+                    class="embed-app-tag">APP</span></div>
+            <div class="embed-timestamp">Today at 10:15</div>
+        </div>
+    </div>
+    <div data-id="embed-body" class="embed-body embed" style="border-color: <?= $item['color'] ?>">
+        <div class="embed-article-source"><span data-id="embed-feedname"><?= $feed_name ?></span> - John Doe</div>
+        <a class="embed-article-title">Title of the article which you can click to go to the website.</a>
+        <div class="embed-article-snippet">
+            Lorem ipsum dolor sit amet consectetur adipisicing elit.
+            Esse maiores odit eaque debitis qui distinctio omnis incidunt obcaecati
+            repellendus repellat, natus ipsa recusandae quo ad asperiores deserunt officia in earum?
+        </div>
+        <div class="embed-image <?= $item['display_thumb'] != 'true' ? 'hidden' : '' ?>" data-id="embed-image">
+            <img src="https://placehold.co/600x400/" alt="Image placeholder" />
+        </div>
+        <div class="embed-footer">
+            <div class="embed-timestamp">#some #tags #from #article • Today at 9:31</div>
+        </div>
+    </div>
+</div>

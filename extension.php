@@ -2,11 +2,12 @@
 class DiscordNotificationsExtension extends Minz_Extension {
 
     public function init() {
-        Minz_View::appendScript($this->getFileUrl('utilities.js', 'js'));
-        Minz_View::appendScript($this->getFileUrl('dynamic-update.js', 'js'));
-        Minz_View::appendScript($this->getFileUrl('collapsible-list.js', 'js'));
-        Minz_View::appendScript($this->getFileUrl('form-control.js', 'js'));
-        Minz_View::appendStyle($this->getFileUrl('index.css', 'css'));
+        Minz_View::appendScript($this->getFileUrl('scripts/utilities.js', 'js'));
+        Minz_View::appendScript($this->getFileUrl('scripts/dynamic-update.js', 'js'));
+        Minz_View::appendScript($this->getFileUrl('scripts/collapsible-list.js', 'js'));
+        Minz_View::appendScript($this->getFileUrl('scripts/form-control.js', 'js'));
+        Minz_View::appendStyle($this->getFileUrl('styles/index.css', 'css'));
+        Minz_View::appendStyle($this->getFileUrl('styles/discord-embed.css', 'css'));
 
         $this->registerHook('entry_before_insert', [$this, 'onFeedUpdate']);
         $this->registerHook('js_vars', [$this, 'addVariables']);

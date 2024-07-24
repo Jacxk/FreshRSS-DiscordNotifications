@@ -1,8 +1,14 @@
 const newItemEvent = new Event("discord-notifications:new-item");
 
 function toggleSwitch() {
+    const switchToggle = this.parentElement.querySelector('[data-name="display_thumb"]');
+
     this.classList.toggle('active')
-    this.parentElement.querySelector('[data-name="display_thumb"]').value = this.classList.contains('active')
+    const isActive = this.classList.contains('active');
+    switchToggle.value = isActive;
+
+    const switchToggleEvent = new CustomEvent("discord-notifications:switch-toggle", { detail: { isActive } });
+    switchToggle.dispatchEvent(switchToggleEvent);
 }
 
 function toggleCollapsible(id) {
@@ -22,9 +28,10 @@ function addNotificationItem(data = {}, open = true) {
     const listHolder = document.querySelector('div.discord-notifications-list');
     const collapsibleItem = document.querySelector('div.collapsible-item').cloneNode(true);
     const collapsibleTitle = collapsibleItem.querySelector('[data-id="collapsible-title"]');
-    const deleteItemButton = collapsibleItem.querySelector(".delete-notification");
+    const deleteItemButton = collapsibleItem.querySelector('[data-id="delete-item"]');
     const avatarPreview = collapsibleItem.querySelector('[data-id="avatar-preview"]');
     const displayThumbSwitch = collapsibleItem.querySelector('[data-name="display_thumb-btn"]')
+    const embedBody = collapsibleItem.querySelector('[data-id="embed-body"]')
 
     function _setValue(elementId, value) {
         const element = collapsibleItem.querySelector(`[data-name="${elementId}"]`);
@@ -47,11 +54,12 @@ function addNotificationItem(data = {}, open = true) {
 
     collapsibleItem.id = `collapsible-${listHolder.children.length}`;
     collapsibleTitle.innerText = data.title || "New Notification Item";
-    collapsibleTitle.onclick = toggleCollapsible.bind(this, collapsibleItem.id);
+    collapsibleTitle.onclick = toggleCollapsible.bind(this, collapsibleItem.id)
     deleteItemButton.onclick = removeItem.bind(this, collapsibleItem.id);
     displayThumbSwitch.onclick = toggleSwitch;
     deleteItemButton.classList.remove('hidden');
     avatarPreview.src = data.avatar || '';
+    embedBody.style.borderColor = values.color
 
     if (data.display_thumb === 'true') toggleSwitch.call(displayThumbSwitch)
 
