@@ -94,6 +94,7 @@ function getData() {
 }
 
 async function checkForUpdate() {
+    console.log('[Discord Notifications Extension] Checking for updates');
     const version = context.extensions["Discord Notifications"].configuration.version;
 
     const response = await fetch("https://raw.githubusercontent.com/Jacxk/FreshRSS-DiscordNotifications/main/metadata.json")
@@ -103,9 +104,10 @@ async function checkForUpdate() {
     const new_version = response.version;
 
     if (new_version > current_version) {
-        sendAlert('A new version of Discord Notifications is available ' +
-            '<a href = "https://github.com/Jacxk/FreshRSS-DiscordNotifications" > here</a >.')
-    }
+        sendAlert(`A new version of Discord Notifications is available 
+            <a href = "https://github.com/Jacxk/FreshRSS-DiscordNotifications/releases/tag/v${new_version}" > here</a >.`)
+        console.log('[Discord Notifications Extension] New update found: ' + new_version);
+    } else console.log('[Discord Notifications Extension] No updates found.');
 }
 
 function sendAlert(html) {
