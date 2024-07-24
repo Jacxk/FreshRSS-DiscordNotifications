@@ -20,7 +20,7 @@ Then, on your FreshRSS instance go to `Settings>Extensions`, under ***User Exten
 * Update notifier (available inside extension config).
 * Import/Export current items.
 * Custom webhook JSON data. - TODO
-* Preview of message to be sent to Discord. - TODO
+* Preview of message to be sent to Discord.
 * Feed specific Discord notifier.
 
 ## Showcase
