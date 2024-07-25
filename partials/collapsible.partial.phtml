@@ -4,7 +4,7 @@
             class="collapsible">
             <?= $item['title'] ?>
         </h3>
-        <a data-id="delete-item" class="<?= $index == 0 ? "hidden" : '' ?>"
+        <a data-id="delete-item" class="delete-item <?= $index == 0 ? "hidden" : '' ?>"
             onclick="removeItem('<?= $item_id ?>')">
             <img class="icon delete-item-icon" src="../themes/icons/close.svg" loading="lazy" alt="❌">
         </a>
