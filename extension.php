@@ -55,7 +55,7 @@ class DiscordNotificationsExtension extends Minz_Extension {
         return $entry;
     }
 
-    private function sendWebhook($url, $data) {
+    private function sendWebhook(string $url, $data) {
         $ch = curl_init($url);
         $json_data = json_encode($data);
 
@@ -78,6 +78,34 @@ class DiscordNotificationsExtension extends Minz_Extension {
         return $response;
     }
 
+    private function getFirstEntryFromFeeds() {
+        $databaseDAO = FreshRSS_Factory::createFeedDao();
+        $feedsId = $databaseDAO->listFeedsIds();
+
+        $entries = [];
+
+        foreach ($feedsId as $feedId) {
+            $feed = $databaseDAO->searchById($feedId);
+            $feedEntries = $feed->entries();
+    
+            if (!empty($feedEntries)) {
+                $entry = $feedEntries[0];
+                $entryArray = [
+                    'title' => $entry->title(),
+                    'author' => implode(', ', $entry->authors()),
+                    'content' => strip_tags($entry->content(false)),
+                    'link' => $entry->link(),
+                    'date' => $entry->date(true),
+                    'tags' => $entry->tags(true),
+                    'thumbnail' => $entry->thumbnail()
+                ];
+                array_push($entries, $entryArray);
+            }
+        }
+
+        return $entries ?? [];
+    }
+
     public function handleConfigureAction() {
         if (Minz_Request::isPost()) {
             $data = Minz_Request::paramString('discord-notifications-data', true);
@@ -95,6 +123,7 @@ class DiscordNotificationsExtension extends Minz_Extension {
         $vars[$this->getName()]['configuration'] = [
             'data' => $this->getData(),
             'version' => $this->getVersion(),
+            'entries_for_embed' => $this->getFirstEntryFromFeeds(),
         ];
 
         return $vars;
