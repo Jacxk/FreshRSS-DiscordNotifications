@@ -2,7 +2,6 @@
   cursor: pointer;
   padding: 5px;
   width: 100%;
-  text-align: left;
 }
 
 .collapsible-content {
@@ -21,4 +20,18 @@
 
 .download-import {
   padding-bottom: 10px;
+}
+
+.delete-item {
+  align-self: center;
+}
+
+.delete-item-icon {
+  width: 35px !important;
+  height: auto !important;
+}
+
+.collapsible-title {
+  display: flex;
+  justify-content: space-between;
 }
