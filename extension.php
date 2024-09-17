@@ -1,6 +1,8 @@
 <?php
 class DiscordNotificationsExtension extends Minz_Extension {
 
+    public $enabled = false;
+
     public function init() {
         Minz_View::appendScript($this->getFileUrl('scripts/utilities.js', 'js'));
         Minz_View::appendScript($this->getFileUrl('scripts/dynamic-update.js', 'js'));
@@ -11,6 +13,8 @@ class DiscordNotificationsExtension extends Minz_Extension {
 
         $this->registerHook('entry_before_insert', [$this, 'onFeedUpdate']);
         $this->registerHook('js_vars', [$this, 'addVariables']);
+
+        $this->enabled = true;
     }
 
     public function onFeedUpdate(FreshRSS_Entry $entry): FreshRSS_Entry {

@@ -57,6 +57,8 @@ function loadEntryEmbed(from, to, i) {
 
     const entry = entries[index];
 
+    if (!entry) return;
+
     const title = to.querySelector('.embed-article-title');
     const author = to.querySelector('.embed-author');
     const body = to.querySelector('.embed-article-snippet');

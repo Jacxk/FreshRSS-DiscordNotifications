@@ -1,32 +1,37 @@
 <form id="extention-form" action="<?php echo _url('extension', 'configure', 'e', urlencode($this->getName())); ?>"
     method="post">
     <input type="hidden" name="_csrf" value="<?php echo FreshRSS_Auth::csrfToken(); ?>" />
-    <input type="hidden" name="discord-notifications-data" value="[]" />
-    <div id="extension-alerts" class="alert hidden" role="alert"></div>
 
-    <div class="download-import">
-        <button id="download-config" type="button" class="btn" title="Download config">Export</button>
-        <button id="import-config" type="button" class="btn" title="Import configuration">Import</button>
-    </div>
+    <?php if ($this->enabled) { ?>
+        <input type="hidden" name="discord-notifications-data" value="[]" />
+        <div id="extension-alerts" class="alert hidden" role="alert"></div>
 
-    <div class="discord-notifications-list">
-        <?php
-        $data = $this->getData();
-
-        foreach ($data as $index => $item) {
-            $item_id = "collapsible-{$index}";
-            include 'partials/collapsible.partial.phtml';
-        } ?>
-    </div>
-
-    <button type="button" class="btn btn-important add-btn" onclick="addNotificationItem()">
-        Add Notification
-    </button>
-
-    <div class="form-group form-actions">
-        <div class="group-controls">
-            <button id="save-changes" type="submit" class="btn btn-important">Save</button>
-            <a type="reset" class="btn" href="#" role="button">Cancel</a>
+        <div class="download-import">
+            <button id="download-config" type="button" class="btn" title="Download config">Export</button>
+            <button id="import-config" type="button" class="btn" title="Import configuration">Import</button>
         </div>
-    </div>
+
+        <div class="discord-notifications-list">
+            <?php
+            $data = $this->getData();
+
+            foreach ($data as $index => $item) {
+                $item_id = "collapsible-{$index}";
+                include 'partials/collapsible.partial.phtml';
+            } ?>
+        </div>
+
+        <button type="button" class="btn btn-important add-btn" onclick="addNotificationItem()">
+            Add Notification
+        </button>
+
+        <div class="form-group form-actions">
+            <div class="group-controls">
+                <button id="save-changes" type="submit" class="btn btn-important">Save</button>
+                <a type="reset" class="btn" href="#" role="button">Cancel</a>
+            </div>
+        </div>
+    <?php } else { ?>
+        <div>You must first enable the extension to be able to configure it.</div>
+    <?php } ?>
 </form>
