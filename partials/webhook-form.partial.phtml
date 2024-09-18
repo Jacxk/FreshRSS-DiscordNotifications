@@ -1,7 +1,7 @@
 <div class="form-group">
     <label class="group-name">Title</label>
     <div class="group-controls">
-        <input type="text" data-name="title" data-id="title" value="<?= $item['title'] ?>"
+        <input type="text" name="title" data-name="title" data-id="title" value="<?= $item['title'] ?>"
             placeholder="Distinguishable name" required />
     </div>
 </div>
@@ -9,7 +9,7 @@
 <div class="form-group">
     <label class="group-name">Webhook URL</label>
     <div class="group-controls">
-        <input type="url" data-name="webhook_url" value="<?= $item['webhook_url'] ?>"
+        <input type="url" name="webhook_url" data-name="webhook_url" value="<?= $item['webhook_url'] ?>"
             placeholder="https://discord.com/api/webhooks/..." required />
     </div>
 </div>
@@ -17,7 +17,7 @@
 <div class="form-group">
     <label class="group-name">Username</label>
     <div class="group-controls">
-        <input type="text" data-name="username" value="<?= $item['username'] ?>" placeholder="Cool webhook" required />
+        <input type="text" name="username" data-name="username" value="<?= $item['username'] ?>" placeholder="Cool webhook" required />
     </div>
 </div>
 
