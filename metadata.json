@@ -2,7 +2,7 @@
 	"name": "Discord Notifications",
 	"author": "Jacxk",
 	"description": "Send feed notifications to Discord using webhooks.",
-	"version": 0.4,
+	"version": 0.5,
 	"entrypoint": "DiscordNotifications",
 	"type": "user"
 }
